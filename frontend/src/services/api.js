@@ -45,21 +45,39 @@ class ApiService {
 
     console.log('=== REQUEST ===');
     console.log('URL:', url);
+    console.log('Method:', options.method || 'GET');
     console.log('Token presente:', !!this.token);
-    console.log('Config:', config);
+    console.log('Headers:', config.headers);
+    if (options.body) {
+      console.log('Body:', options.body);
+    }
 
     try {
+      console.log('Fazendo fetch...');
       const response = await fetch(url, config);
-      const data = await response.json();
+      console.log('Response status:', response.status);
+      console.log('Response headers:', Object.fromEntries(response.headers.entries()));
+      
+      let data;
+      const contentType = response.headers.get('content-type');
+      
+      if (contentType && contentType.includes('application/json')) {
+        data = await response.json();
+      } else {
+        const text = await response.text();
+        console.error('Resposta não é JSON:', text.substring(0, 200));
+        throw new Error('Servidor retornou resposta inválida (não JSON)');
+      }
 
       if (!response.ok) {
         console.error('=== ERRO NA API ===');
         console.error('Status:', response.status);
+        console.error('Status Text:', response.statusText);
         console.error('Data:', data);
         if (response.status === 500) {
-          console.error('Detalhes do erro do servidor:', data.details);
+          console.error('Detalhes do erro do servidor:', data.debug);
         }
-        throw new Error(data.error || 'Erro na requisição');
+        throw new Error(data.error || `Erro HTTP ${response.status}: ${response.statusText}`);
       }
 
       console.log('=== RESPOSTA OK ===');
@@ -67,7 +85,15 @@ class ApiService {
       return data;
     } catch (error) {
       console.error('=== ERRO NO REQUEST ===');
-      console.error('Error:', error);
+      console.error('Error name:', error.name);
+      console.error('Error message:', error.message);
+      console.error('Error stack:', error.stack);
+      
+      // Verificar se é erro de rede
+      if (error.name === 'TypeError' && error.message.includes('fetch')) {
+        throw new Error('Erro de conexão: Verifique se o servidor backend está rodando na porta 3000');
+      }
+      
       throw error;
     }
   }
@@ -96,6 +122,13 @@ class ApiService {
     this.clearToken();
   }
 
+  async post(endpoint, data) {
+    return this.request(endpoint, {
+      method: 'POST',
+      body: JSON.stringify(data),
+    });
+  }
+
   async getUserProfile() {
     return this.request('/user/profile');
   }
@@ -119,6 +152,13 @@ class ApiService {
     return this.request('/simulations', {
       method: 'POST',
       body: JSON.stringify(simulationData),
+    });
+  }
+
+  async changePassword(data) {
+    return this.request('/auth/change-password', {
+      method: 'POST',
+      body: JSON.stringify(data),
     });
   }
 

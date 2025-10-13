@@ -4,7 +4,7 @@ import { TabMenu } from './components/UI/tabs';
 import { Login } from './components/Auth/Login';
 import { Register } from './components/Auth/Register';
 import { Welcome } from './components/Welcome/Welcome';
-import { RecuperarSenha } from './components/Auth/Recuperarsenha';
+import { ModificarSenha } from './components/Auth/ModificarSenha';
 import './index.css';
 import './App.css';
 
@@ -27,15 +27,14 @@ function AppContent() {
                 {authMode === 'login' ? (
                                 <Login
                                     onSwitchToRegister={() => setAuthMode('register')}
-                                    onSwitchToRecuperarSenha={() => setAuthMode('recuperarsenha')}
+                                    onSwitchToModificarSenha={() => setAuthMode('modificarsenha')}
                                 />
                             ) : authMode === 'register' ? (
                                 <Register
                                     onSwitchToLogin={() => setAuthMode('login')}
                                 />
-                            ) : ( 
-
-                                <RecuperarSenha
+                            ) : (
+                                <ModificarSenha
                                     onSwitchToLogin={() => setAuthMode('login')}
                                 />
                             )}

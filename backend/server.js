@@ -175,6 +175,71 @@ app.post('/api/auth/register', async (req, res) => {
   }
 });
 
+// Change password route
+app.post('/api/auth/change-password', async (req, res) => {
+  console.log('=== CHANGE PASSWORD EXPRESS API ===');
+  
+  try {
+    const { step, email, userId, newPassword } = req.body;
+    console.log('Parâmetros:', { step, email, userId, newPassword: newPassword ? '[PRESENTE]' : '[AUSENTE]' });
+
+    const connection = await pool.getConnection();
+
+    if (step === 'validate') {
+      console.log('=== VALIDANDO EMAIL ===');
+      
+      const [users] = await connection.execute(
+        'SELECT id, name FROM users WHERE email = ?',
+        [email]
+      );
+      
+      console.log('Resultado da consulta:', users);
+      connection.release();
+
+      if (!Array.isArray(users) || users.length === 0) {
+        console.log('Email não encontrado');
+        return res.status(404).json({ error: 'E-mail não encontrado no sistema' });
+      }
+
+      const user = users[0];
+      console.log('Usuário encontrado:', user);
+      
+      return res.json({
+        success: true,
+        userId: user.id,
+        userName: user.name
+      });
+    }
+
+    if (step === 'update') {
+      console.log('=== ATUALIZANDO SENHA ===');
+      
+      if (!newPassword || newPassword.length < 6) {
+        connection.release();
+        return res.status(400).json({ error: 'A nova senha deve ter pelo menos 6 caracteres' });
+      }
+
+      const hashedPassword = await bcrypt.hash(newPassword, 12);
+      
+      const [result] = await connection.execute(
+        'UPDATE users SET password_hash = ? WHERE id = ?',
+        [hashedPassword, userId]
+      );
+      
+      console.log('Resultado da atualização:', result);
+      connection.release();
+
+      return res.json({ message: 'Senha modificada com sucesso!' });
+    }
+
+    return res.status(400).json({ error: 'Operação inválida' });
+
+  } catch (error) {
+    console.error('Error in change password:', error);
+    return res.status(500).json({ error: 'Erro interno do servidor' });
+  }
+});
+
 // Simulation routes
 app.get('/api/questions', async (req, res) => {
   const fs = require('fs');

@@ -58,6 +58,19 @@ export async function initDatabase() {
       )
     `);
 
+    await connection.execute(`
+      CREATE TABLE IF NOT EXISTS PasswordResetTokens (
+        id INT AUTO_INCREMENT PRIMARY KEY,
+        userId INT NOT NULL,
+        token VARCHAR(255) NOT NULL,
+        expiresAt DATETIME NOT NULL,
+        createdAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+        FOREIGN KEY (userId) REFERENCES users(id) ON DELETE CASCADE,
+        INDEX idx_token (token),
+        INDEX idx_expires (expiresAt)
+      )
+    `);
+
     connection.release();
     console.log('Database initialized successfully');
   } catch (error) {

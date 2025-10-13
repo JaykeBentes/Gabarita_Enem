@@ -3,7 +3,7 @@ import { User, Lock, Eye, EyeOff } from 'lucide-react';
 import { apiService } from '../../services/api';
 import { useAuth } from '../../contexts/AuthContext';
 
-export const Login = ({ onSwitchToRegister , onSwitchToRecuperarSenha}) => {
+export const Login = ({ onSwitchToRegister , onSwitchToModificarSenha}) => {
     const { login } = useAuth();
     const [formData, setFormData] = useState({ email: '', password: '' });
     const [showPassword, setShowPassword] = useState(false);
@@ -69,9 +69,9 @@ export const Login = ({ onSwitchToRegister , onSwitchToRecuperarSenha}) => {
                     </button>
                 </p>
                 <p>
-                    Esqueceu sua senha?
-                    <button onClick={onSwitchToRecuperarSenha} className="link-button">
-                        Recuperar Senha
+                    Quer modificar sua senha?
+                    <button onClick={onSwitchToModificarSenha} className="link-button">
+                        Modificar Senha
                     </button>
                 </p>
             </div>

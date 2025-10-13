@@ -4,7 +4,7 @@ import { apiService } from '../../services/api';
 import { useAuth } from '../../contexts/AuthContext';
 import { 
     User, BookOpen, NotebookText, BarChart, History, 
-    Award, TrendingUp, Clock, Target, Flame, Play, ArrowLeft 
+    Award, TrendingUp, Clock, Target, Flame, Play, ArrowLeft, Mail, Lock 
 } from 'lucide-react';
 import { SimulationSetup } from '../Simulation/SimulationSetup';
 import { SimulationQuiz } from '../Simulation/SimulationQuiz';
@@ -61,7 +61,6 @@ const ProfileTab = () => {
                 setHistoryData(history);
             } catch (error) {
                 console.error('Erro ao carregar dados:', error);
-                // Usar dados do contexto como fallback
                 setUserData(user || {
                     name: 'Usuário',
                     email: 'usuario@example.com',
@@ -92,7 +91,7 @@ const ProfileTab = () => {
     const subjects = performanceData?.subjectPerformance || [];
     const history = historyData?.recentHistory || [];
 
-    // Criar userStats dinamicamente com dados do backend
+
     const userStats = [
         { id: 'provas', icon: BookOpen, label: 'Provas Realizadas', value: stats.totalSimulations?.toString() || '0' },
         { id: 'acertos', icon: Target, label: 'Média de Acertos', value: `${stats.averageScore || 0}%` },
@@ -160,7 +159,7 @@ const ProfileTab = () => {
                                 <p className="date">{item.date}</p>
                             </div>
                             <div className="history-score">
-                                <p className="score">{item.score}%</p>
+                                <p className="score">{item.score}</p>
                                 <p className={`grade ${item.gradeColor}`}>{item.grade}</p>
                             </div>
                         </div>
@@ -186,26 +185,29 @@ const StudyTab = () => {
 
     const videos = {
         'matematica': [
-            { id: 1, title: 'Funções do 1º Grau', duration: '15:30', thumbnail: 'https://img.youtube.com/vi/dQw4w9WgXcQ/mqdefault.jpg', videoId: 'dQw4w9WgXcQ' },
-            { id: 2, title: 'Geometria Plana', duration: '22:45', thumbnail: 'https://img.youtube.com/vi/dQw4w9WgXcQ/mqdefault.jpg', videoId: 'dQw4w9WgXcQ' },
-            { id: 3, title: 'Trigonometria Básica', duration: '18:20', thumbnail: 'https://img.youtube.com/vi/dQw4w9WgXcQ/mqdefault.jpg', videoId: 'dQw4w9WgXcQ' }
+            { id: 1, title: 'AULÃO DE MATEMÁTICA PARA O ENEM E VESTIBULARES: Resumo de 10 temas', duration: '1:22:51', thumbnail: 'https://img.youtube.com/vi/MSZdhDBoXe0/mqdefault.jpg', videoId: 'MSZdhDBoXe0' },
+            { id: 2, title: 'AS PRINCIPAIS FÓRMULAS DE MATEMÁTICA DO ENEM EM 15 MINUTOS', duration: '15:06', thumbnail: 'https://img.youtube.com/vi/wLlQdu-q6dc/mqdefault.jpg', videoId: 'wLlQdu-q6dc' },
+            { id: 3, title: 'Aprenda matemática em alguns dias! - Fundamentos e Bases', duration: '1:16:13', thumbnail: 'https://img.youtube.com/vi/OOmEI2Q33R0/mqdefault.jpg', videoId: 'OOmEI2Q33R0' },
+            { id: 13, title: 'PADRÕES de QUESTÕES em MATEMÁTICA do ENEM!', duration: '38:57', thumbnail: 'https://img.youtube.com/vi/r7sGiwcwk3k/mqdefault.jpg', videoId: 'r7sGiwcwk3k' }
         ],
         'ciencias-natureza': [
-            { id: 4, title: 'Química Orgânica', duration: '25:10', thumbnail: 'https://img.youtube.com/vi/dQw4w9WgXcQ/mqdefault.jpg', videoId: 'dQw4w9WgXcQ' },
-            { id: 5, title: 'Física - Mecânica', duration: '30:15', thumbnail: 'https://img.youtube.com/vi/dQw4w9WgXcQ/mqdefault.jpg', videoId: 'dQw4w9WgXcQ' },
-            { id: 6, title: 'Biologia - Genética', duration: '20:30', thumbnail: 'https://img.youtube.com/vi/dQw4w9WgXcQ/mqdefault.jpg', videoId: 'dQw4w9WgXcQ' }
+            { id: 4, title: 'PADRÕES de QUESTÕES em CIÊNCIAS da NATUREZA no ENEM 2025', duration: '47:07', thumbnail: 'https://img.youtube.com/vi/XRasCb_uueQ/mqdefault.jpg', videoId: 'XRasCb_uueQ' },
+            { id: 5, title: 'Como GABARITAR Ciências da NATUREZA do Enem', duration: '39:36', thumbnail: 'https://img.youtube.com/vi/JNhC5Vvm0/mqdefault.jpg', videoId: 'JNhC5Vvm0' },
+            { id: 6, title: 'AULÃO DE BIOLOGIA PARA O ENEM: 10 temas que mais caem', duration: '1:20:07', thumbnail: 'https://img.youtube.com/vi/fo7JbUG5flY/mqdefault.jpg', videoId: 'fo7JbUG5flY' },
+            { id: 14, title: 'TUDO de QUÍMICA GERAL pro ENEM 2025 ', duration: '5:52:35', thumbnail: 'https://img.youtube.com/vi/S5O-_kHn3W0/mqdefault.jpg', videoId: 'S5O-_kHn3W0' }
         ],
         'linguagens': [
-            { id: 7, title: 'Literatura Brasileira', duration: '28:45', thumbnail: 'https://img.youtube.com/vi/dQw4w9WgXcQ/mqdefault.jpg', videoId: 'dQw4w9WgXcQ' },
-            { id: 8, title: 'Gramática - Sintaxe', duration: '24:20', thumbnail: 'https://img.youtube.com/vi/dQw4w9WgXcQ/mqdefault.jpg', videoId: 'dQw4w9WgXcQ' }
+            { id: 7, title: 'LTUDO de LITERATURA e VANGUARDAS EUROPÉIAS pro ENEM 2025', duration: '3:09:31', thumbnail: 'https://img.youtube.com/vi/K3g7l1hIREw/mqdefault.jpg', videoId: 'K3g7l1hIREw' },
+            { id: 8, title: 'AULÃO DE ESPANHOL PARA O ENEM: temas e dicas essenciais', duration: '31:37', thumbnail: 'https://img.youtube.com/vi/uvZvp8dI9JM/mqdefault.jpg', videoId: 'uvZvp8dI9JM' },
+            { id: 15, title: 'AULÃO DE INGLÊS PARA O ENEM: temas e técnicas essenciais ', duration: '25:23', thumbnail: 'https://img.youtube.com/vi/2mXyS6VFJh4/mqdefault.jpg', videoId: '2mXyS6VFJh4' }
         ],
         'ciencias-humanas': [
-            { id: 9, title: 'História do Brasil', duration: '35:10', thumbnail: 'https://img.youtube.com/vi/dQw4w9WgXcQ/mqdefault.jpg', videoId: 'dQw4w9WgXcQ' },
-            { id: 10, title: 'Geografia - Geopolítica', duration: '27:30', thumbnail: 'https://img.youtube.com/vi/dQw4w9WgXcQ/mqdefault.jpg', videoId: 'dQw4w9WgXcQ' }
+            { id: 9, title: 'TODA A HISTÓRIA DO ENEM - REVISÃO (Débora Aladim)', duration: '1:56:24', thumbnail: 'https://img.youtube.com/vi/cuHddXfinDE/mqdefault.jpg', videoId: 'cuHddXfinDE' },
+            { id: 10, title: 'AULÃO ENEM DE GEOGRAFIA: 10 temas que mais caem', duration: '1:05:47', thumbnail: 'https://img.youtube.com/vi/5w4MOmECfaA/mqdefault.jpg', videoId: '5w4MOmECfaA' }
         ],
         'redacao': [
-            { id: 11, title: 'Estrutura da Redação ENEM', duration: '32:15', thumbnail: 'https://img.youtube.com/vi/dQw4w9WgXcQ/mqdefault.jpg', videoId: 'dQw4w9WgXcQ' },
-            { id: 12, title: 'Argumentação e Coesão', duration: '26:40', thumbnail: 'https://img.youtube.com/vi/dQw4w9WgXcQ/mqdefault.jpg', videoId: 'dQw4w9WgXcQ' }
+            { id: 11, title: 'SUPER REVISÃO DE REDAÇÃO PARA O ENEM 2025', duration: '28:11', thumbnail: 'https://img.youtube.com/vi/RyOZLgk-c5w/mqdefault.jpg', videoId: 'RyOZLgk-c5w' },
+            { id: 12, title: 'AULÃO DE REDAÇÃO PARA O ENEM: como alcançar a nota 1000', duration: '1:12:55', thumbnail: 'https://img.youtube.com/vi/cVlfWDcIAfo/mqdefault.jpg', videoId: 'cVlfWDcIAfo' }
         ]
     };
 
@@ -287,6 +289,154 @@ const StudyTab = () => {
                             ))}
                         </div>
                     </div>
+                )}
+            </div>
+        </div>
+    );
+};
+
+const ConfigTab = () => {
+    const [email, setEmail] = useState('');
+    const [newPassword, setNewPassword] = useState('');
+    const [confirmPassword, setConfirmPassword] = useState('');
+    const [isLoading, setIsLoading] = useState(false);
+    const [error, setError] = useState('');
+    const [message, setMessage] = useState('');
+    const [step, setStep] = useState(1);
+    const [userId, setUserId] = useState(null);
+    const [userName, setUserName] = useState('');
+
+    const handleEmailSubmit = async (e) => {
+        e.preventDefault();
+        setIsLoading(true);
+        setError('');
+        
+        try {
+            const response = await apiService.changePassword({ step: 'validate', email });
+            setUserId(response.userId);
+            setUserName(response.userName);
+            setStep(2);
+            setMessage(`Olá ${response.userName}! Agora defina sua nova senha.`);
+        } catch (err) {
+            setError('E-mail não encontrado no sistema.');
+        } finally {
+            setIsLoading(false);
+        }
+    };
+
+    const handlePasswordSubmit = async (e) => {
+        e.preventDefault();
+        
+        if (newPassword !== confirmPassword) {
+            setError('As senhas não coincidem.');
+            return;
+        }
+        
+        if (newPassword.length < 6) {
+            setError('A nova senha deve ter pelo menos 6 caracteres.');
+            return;
+        }
+        
+        setIsLoading(true);
+        setError('');
+        
+        try {
+            await apiService.changePassword({ step: 'update', userId, newPassword });
+            setMessage('Senha modificada com sucesso!');
+            setTimeout(() => {
+                setStep(1);
+                setEmail('');
+                setNewPassword('');
+                setConfirmPassword('');
+                setMessage('');
+            }, 2000);
+        } catch (err) {
+            setError('Erro ao modificar senha. Tente novamente.');
+        } finally {
+            setIsLoading(false);
+        }
+    };
+
+    const resetForm = () => {
+        setStep(1);
+        setEmail('');
+        setNewPassword('');
+        setConfirmPassword('');
+        setError('');
+        setMessage('');
+        setUserId(null);
+        setUserName('');
+    };
+
+    return (
+        <div className="config-container">
+            <div className="config-section">
+                <h3>Modificar Senha</h3>
+                
+                {step === 1 ? (
+                    <form onSubmit={handleEmailSubmit} className="config-form">
+                        <p>Digite seu e-mail para validar sua conta:</p>
+                        <div className="input-group">
+                            <Mail size={20} />
+                            <input
+                                type="email"
+                                placeholder="Seu E-mail"
+                                value={email}
+                                onChange={(e) => setEmail(e.target.value)}
+                                required
+                            />
+                        </div>
+                        
+                        {error && <div className="error-message">{error}</div>}
+                        {message && <div className="success-message">{message}</div>}
+                        
+                        <button type="submit" disabled={isLoading} className="config-button">
+                            {isLoading ? 'Validando...' : 'Validar E-mail'}
+                        </button>
+                    </form>
+                ) : (
+                    <form onSubmit={handlePasswordSubmit} className="config-form">
+                        <p>
+                            <User size={16} style={{ display: 'inline', marginRight: '8px' }} />
+                            {userName}, digite sua nova senha:
+                        </p>
+                        
+                        <div className="input-group">
+                            <Lock size={20} />
+                            <input
+                                type="password"
+                                placeholder="Nova Senha"
+                                value={newPassword}
+                                onChange={(e) => setNewPassword(e.target.value)}
+                                required
+                                minLength={6}
+                            />
+                        </div>
+                        
+                        <div className="input-group">
+                            <Lock size={20} />
+                            <input
+                                type="password"
+                                placeholder="Confirmar Nova Senha"
+                                value={confirmPassword}
+                                onChange={(e) => setConfirmPassword(e.target.value)}
+                                required
+                                minLength={6}
+                            />
+                        </div>
+                        
+                        {error && <div className="error-message">{error}</div>}
+                        {message && <div className="success-message">{message}</div>}
+                        
+                        <div className="button-group">
+                            <button type="submit" disabled={isLoading} className="config-button">
+                                {isLoading ? 'Modificando...' : 'Modificar Senha'}
+                            </button>
+                            <button type="button" onClick={resetForm} className="config-button secondary">
+                                Cancelar
+                            </button>
+                        </div>
+                    </form>
                 )}
             </div>
         </div>
@@ -418,4 +568,4 @@ const SimulationTab = ({ onGoToProfile }) => {
             return <SimulationSetup onStartSimulation={handleStartSimulation} />;
     }
 };
-export { ProfileTab, StudyTab, SimulationTab };
+export { ProfileTab, StudyTab, SimulationTab, ConfigTab };
