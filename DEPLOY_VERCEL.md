@@ -9,13 +9,13 @@
 No painel do Vercel, vá em **Settings > Environment Variables** e adicione:
 
 ```
-DB_HOST=gateway01.us-east-1.prod.aws.tidbcloud.com
-DB_PORT=4000
-DB_USERNAME=37MjaWfm8GRRgyG.root
-DB_PASSWORD=eDLwd5fy5zQjILv2
+DB_HOST=
+DB_PORT=
+DB_USERNAME=
+DB_PASSWORD=
 DB_DATABASE=appenem_db
-JWT_SECRET=gabarita-enem-secret-key-2024
-NEXTAUTH_SECRET=gabarita-enem-nextauth-secret-2024
+JWT_SECRET=
+NEXTAUTH_SECRET=
 NEXTAUTH_URL=https://seu-dominio.vercel.app
 ```
 

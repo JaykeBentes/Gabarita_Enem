@@ -1,5 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 
+export const dynamic = 'force-dynamic';
+
 export async function GET(request: NextRequest) {
   try {
     const { searchParams } = new URL(request.url);
@@ -39,8 +41,10 @@ export async function GET(request: NextRequest) {
         let offset = 0;
         if (subject === 'matematica') offset = 130;
         else if (subject === 'ciencias-natureza') offset = 90;
-        const enemApiUrl = `http://localhost:3001/v1/exams/${year}/questions?limit=50&offset=${offset}`;
-        console.log(`Buscando em ${year}...`);
+        const enemApiUrl = process.env.ENEM_API_URL 
+          ? `${process.env.ENEM_API_URL}/v1/exams/${year}/questions?limit=50&offset=${offset}`
+          : `http://localhost:3001/v1/exams/${year}/questions?limit=50&offset=${offset}`;
+        console.log(`Buscando em ${year}: ${enemApiUrl}`);
         
         const response = await fetch(enemApiUrl);
         if (!response.ok) continue;

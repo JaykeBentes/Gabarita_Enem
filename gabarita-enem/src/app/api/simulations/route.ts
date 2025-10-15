@@ -2,6 +2,8 @@ import { NextRequest, NextResponse } from 'next/server';
 import { getPool } from '@/lib/database';
 import { getTokenFromRequest, verifyToken } from '@/lib/auth';
 
+export const dynamic = 'force-dynamic';
+
 export async function POST(request: NextRequest) {
   try {
     const { subject, totalQuestions, correctAnswers, timeElapsed, answers, questions } = await request.json();
