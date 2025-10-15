@@ -1,6 +1,4 @@
-import { NextRequest } from 'next/server';
-
-export async function logger(_request: NextRequest) {
+export async function logger() {
     // Logger desabilitado para evitar erros do Prisma em produção
     return;
 }

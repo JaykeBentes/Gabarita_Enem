@@ -21,7 +21,7 @@ export async function GET(
     try {
         const { rateLimitHeaders } = rateLimiter.check(request);
 
-        await logger(request);
+        await logger();
 
         const examYears = await getExamsYears();
 
